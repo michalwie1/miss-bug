@@ -1,8 +1,8 @@
 const { useState, useEffect } = React
 const { Link, useParams } = ReactRouterDOM
 
-import { bugService } from '../services/bug.service.local.js'
-import { showErrorMsg } from '../services/event-bus.service.js'
+import { bugService } from '../public/services/bug.service.local.js'
+import { showErrorMsg } from '../public/services/event-bus.service.js'
 
 export function BugDetails() {
 

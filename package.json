@@ -9,11 +9,21 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --ignore \"./data\" server.js"
+    "dev": "nodemon --ignore \"./data\" server.js",
+    "start": "node server.js"
   },
   "author": "michal",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.1.0"
-  }
+    "express": "^5.1.0",
+    "follow-redirects": "^1.15.11"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michalwie1/miss-bug.git"
+  },
+  "bugs": {
+    "url": "https://github.com/michalwie1/miss-bug/issues"
+  },
+  "homepage": "https://github.com/michalwie1/miss-bug#readme"
 }
