@@ -1,7 +1,8 @@
 const { useState, useEffect } = React
 
-import { bugService } from '../public/services/bug.service.local.js'
-import { showSuccessMsg, showErrorMsg } from '../public/services/event-bus.service.js'
+// import { bugService } from '../services/bug.service.local.js'
+import { bugService } from '../services/bug.service.remote.js'
+import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
 
 import { BugFilter } from '../cmps/BugFilter.jsx'
 import { BugList } from '../cmps/BugList.jsx'
@@ -10,13 +11,21 @@ export function BugIndex() {
     const [bugs, setBugs] = useState(null)
     const [filterBy, setFilterBy] = useState(bugService.getDefaultFilter())
 
-    useEffect(loadBugs, [filterBy])
-
-    function loadBugs() {
+    useEffect(() => {
         bugService.query(filterBy)
-            .then(setBugs)
-            .catch(err => showErrorMsg(`Couldn't load bugs - ${err}`))
-    }
+            .then(bugs => setBugs(bugs))
+            .catch(err => console.log('err:', err))
+    }, [filterBy])
+
+    // useEffect(
+    //     loadBugs
+    //     , [filterBy])
+
+    // function loadBugs() {
+    //     bugService.query(filterBy)
+    //         .then(setBugs)
+    //         .catch(err => showErrorMsg(`Couldn't load bugs - ${err}`))
+    // }
 
     function onRemoveBug(bugId) {
         bugService.remove(bugId)
