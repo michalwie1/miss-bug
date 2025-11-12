@@ -28,24 +28,33 @@ app.get('/api/bug/save', (req, res) => {
 
 
 app.get('/api/bug', (req, res) => {
-	bugService.query()
+	const filterBy = {
+		txt: req.query.txt || '',
+		minSeverity: +req.query.minSeverity || 0,
+		// paginationOn: req.query.paginationOn === 'true',
+		// pageIdx: +req.query.pageIdx || 0,
+	}
+	bugService.query(filterBy)
         .then(bugs => res.send(bugs))
+
+
+
+
+
+	// bugService.query()
+    //     .then(bugs => res.send(bugs))
 })
 
 
 app.get('/api/bug/:id', (req, res) => {
     const bugId = req.params.id
-    // const visitedBugs = JSON.parse(req.cookies.visitedBugs || '[]')
     const visitedBugs = req.cookies.visitedBugs || []
-    // visitedBugs.push(bugId)
+
     if (!visitedBugs.includes(bugId)) visitedBugs.push(bugId)
+    if (visitedBugs.length > 2) return res.status(401).send('Wait for a bit')
 
-        
-        
-        if (visitedBugs.length > 2) return res.status(401).send('Wait for a bit')
-            res.cookie('visitedBugs', visitedBugs, { maxAge: 7_000 } )
-            console.log('User visited at the following bugs:',visitedBugs )
-
+    res.cookie('visitedBugs', visitedBugs, { maxAge: 7_000 } )
+    console.log('User visited at the following bugs:',visitedBugs )
 
     bugService.getById(bugId)
         .then(bug => res.send(bug))
