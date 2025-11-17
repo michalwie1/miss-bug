@@ -75,6 +75,10 @@ function _createBugs() {
     utilService.saveToStorage(STORAGE_KEY, bugs)
 }
 
+// function getDefaultFilter() {
+//     return { txt: '', minSeverity: 0 }
+// }
+
 function getDefaultFilter() {
-    return { txt: '', minSeverity: 0 }
+    return { txt: '', minSeverity: 0, labels: [], sortField: '', sortDir: 1 }
 }

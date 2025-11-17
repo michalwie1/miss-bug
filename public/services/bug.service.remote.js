@@ -1,5 +1,3 @@
-// import { utilService } from './util.service.js'
-// import { storageService } from './async-storage.service.js'
 
 const BASE_URL = '/api/bug'
 // const BUG_KEY = 'bugs'
@@ -11,30 +9,26 @@ export const bugService = {
     get,
     remove,
     save,
-    getEmptyBug,
+    // getEmptyBug,
     getDefaultFilter,
+    getById,
+    getLabels
 }
 
-function query(filterBy = {}) {
-    return axios.get(BASE_URL, { params: filterBy })
+
+function query(queryOptions) {
+    return axios.get(BASE_URL, { params: queryOptions })
         .then(res => res.data)
 }
 
 
-// function query(filterBy = {}) {
-//     return axios.get(BASE_URL)
-//         .then(res => res.data)
-//         .then(bugs => {
-//             if (filterBy.txt) {
-//                 const regExp = new RegExp(filterBy.txt, 'i')
-//                 bugs = bugs.filter(bug => regExp.test(bug.title))
-//             }
-//             if (filterBy.severity) {
-//                 bugs = bugs.filter(bug => bug.severity >= filterBy.severity)
-//             }
-//             return bugs
-//         })
-// }
+
+function getById(bugId) {
+    return axios.get(BASE_URL + '/' + bugId)
+        .then(res => res.data)
+}
+
+
 
 function get(bugId) {
     return axios.get(BASE_URL + '/' + bugId)
@@ -43,49 +37,24 @@ function get(bugId) {
 
 
 function remove(bugId) {
-    return axios.get(BASE_URL + '/' + bugId + '/remove')
+    return axios.delete(BASE_URL + '/' + bugId)
 }
 
 
 function save(bug) {
-    const queryStr = '/save?' +
-        `title=${bug.title}&` +
-        `severity=${bug.severity}&` +
-        `id=${bug._id || ''}`
-
-
-    return axios.get(BASE_URL + queryStr)
+    const method = bug._id ? 'put' : 'post'
+    const bugId = bug._id || ''
+    
+    return axios.put(BASE_URL + '/' + bug._id, bug)
         .then(res => res.data)
 }
 
 
-function getEmptyBug(title = '', severity = '') {
-    return { title, severity }
-}
-
-
 function getDefaultFilter() {
-    return { text: '', minSeverity: '' }
+    return { txt: '', minSeverity: 0, labels: [], sortField: '', sortDir: 1 }
 }
 
+function getLabels(){
+    return ['back', 'front', 'critical']
+}
 
-// function _createBugs() {
-//     let bugs = utilService.loadFromStorage(BUG_KEY)
-//     if (!bugs || !bugs.length) {
-//         bugs = []
-//         bugs.push(_createBug('Cannot reload data', 3))
-//         bugs.push(_createBug('Cannot upload image', 5))
-//         bugs.push(_createBug('Cannot save item', 8))
-//         bugs.push(_createBug('Cannot edit itm', 7))
-//         utilService.saveToStorage(BUG_KEY, bugs)
-//     }
-// }
-
-
-// function _createBug(title, severity = 5) {
-//     const bug = getEmptyBug(title, severity)
-//     bug._id = utilService.makeId()
-//     bug.description = utilService.makeLorem(5)
-//     bug.createdAt = Date.now()
-//     return bug
-// }

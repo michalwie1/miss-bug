@@ -5,18 +5,53 @@
     "severity": 9
   },
   {
-    "_id": "bk0ch",
-    "title": "Bug 1762288319372",
-    "severity": 3
+    "_id": "VORO5",
+    "title": "jhkg",
+    "severity": 2,
+    "createdAt": 1762959877591,
+    "description": ""
   },
   {
-    "_id": "ONaJ5",
-    "title": "Bug 1762952865603",
-    "severity": 3
+    "_id": "kIqnS",
+    "title": "Bug 1763031682348",
+    "description": "bla",
+    "severity": 3,
+    "createdAt": 1763031686199
   },
   {
-    "_id": "pCuYY",
-    "title": "Bug 1762954370806",
-    "severity": 3
+    "_id": "nYTVI",
+    "title": "ljh",
+    "description": "bla",
+    "severity": 3,
+    "createdAt": 1763031690364
+  },
+  {
+    "_id": "Km8Gf",
+    "title": "hjf",
+    "description": "bla",
+    "severity": 3,
+    "createdAt": 1763031819939
+  },
+  {
+    "_id": "rWRFu",
+    "title": "kj",
+    "description": "bla",
+    "severity": 3,
+    "createdAt": 1763032030386
+  },
+  {
+    "_id": "I5PmR",
+    "title": "sa",
+    "description": "bla",
+    "severity": 3,
+    "createdAt": 1763032142617
+  },
+  {
+    "title": "a",
+    "description": "bla",
+    "severity": 3,
+    "labels": [],
+    "_id": "2BvIG",
+    "createdAt": 1763069941701
   }
 ]

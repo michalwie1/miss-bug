@@ -11,21 +11,21 @@ export function BugIndex() {
     const [bugs, setBugs] = useState(null)
     const [filterBy, setFilterBy] = useState(bugService.getDefaultFilter())
 
-    useEffect(() => {
-        bugService.query(filterBy)
-            .then(bugs => setBugs(bugs))
-            .catch(err => console.log('err:', err))
-    }, [filterBy])
-
-    // useEffect(
-    //     loadBugs
-    //     , [filterBy])
-
-    // function loadBugs() {
+    // useEffect(() => {
     //     bugService.query(filterBy)
-    //         .then(setBugs)
-    //         .catch(err => showErrorMsg(`Couldn't load bugs - ${err}`))
-    // }
+    //         .then(bugs => setBugs(bugs))
+    //         .catch(err => console.log('err:', err))
+    // }, [filterBy])
+
+    useEffect(
+        loadBugs
+        , [filterBy])
+
+    function loadBugs() {
+        bugService.query(filterBy)
+            .then(setBugs)
+            .catch(err => showErrorMsg(`Couldn't load bugs - ${err}`))
+    }
 
     function onRemoveBug(bugId) {
         bugService.remove(bugId)
@@ -40,7 +40,8 @@ export function BugIndex() {
     function onAddBug() {
         const bug = {
             title: prompt('Bug title?', 'Bug ' + Date.now()),
-            severity: +prompt('Bug severity?', 3)
+            severity: +prompt('Bug severity?', 3),
+            description: prompt('Bug description?', 'bla')
         }
 
         bugService.save(bug)
