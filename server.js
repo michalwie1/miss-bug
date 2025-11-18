@@ -93,9 +93,6 @@ app.post('/api/bug', (req, res) => {
 })
 
 
-
-
-
 app.get('/api/bug', (req, res) => {
     const queryOptions = parseQueryParams(req.query)
     // req.query = query params (after the ? in the url)
@@ -211,11 +208,8 @@ function parseQueryParams(queryParams) {
         pageSize: +queryParams.pageSize || 3,
     }
 
-
     return { filterBy, sortBy, pagination }
 }
 
-
-
 const port = 3030
-app.listen(port, () => loggerService.info(`Server listening on port http://127.0.0.1:${port}/`))
+app.listen(port, () => loggerService.info(`Server listening on port http://127.0.0.1:${port}`))
