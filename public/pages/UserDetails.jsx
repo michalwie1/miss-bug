@@ -1,102 +1,48 @@
-const { useState } = React
-const { useNavigate } = ReactRouter
+const { useState, useEffect } = React
+const { useParams, useNavigate } = ReactRouterDOM
 
 
-import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
-import { userService } from '../services/user.service.js'
-import { authService } from '../services/auth.service.js'
+import { userService } from "../services/user.service.js"
 
 
+export function UserDetails() {
 
 
-export function LoginSignup({ setLoggedinUser }) {
-
-
-    const [isSignup, setIsSignUp] = useState(false)
-    const [credentials, setCredentials] = useState(userService.getEmptyCredentials())
-    
+    const [user, setUser] = useState(null)
+    const params = useParams()
     const navigate = useNavigate()
 
 
-    function handleChange({ target }) {
-        const { name: field, value } = target
-        setCredentials(prevCreds => ({ ...prevCreds, [field]: value }))
-    }
+    useEffect(() => {
+        loadUser()
+    }, [params.userId])
 
 
-    function handleSubmit(ev) {
-        ev.preventDefault()
-        isSignup ? signup(credentials) : login(credentials)
-    }
-
-
-    function login(credentials) {
-        authService.login(credentials)
-            .then(user => {
-                setLoggedinUser(user)
-                showSuccessMsg('Logged in successfully')
-                navigate('/bug')
-            })
-            .catch(err => { 
-                console.log(err)
-                showErrorMsg(`Couldn't login...`) 
+    function loadUser() {
+        userService.getById(params.userId)
+            .then(setUser)
+            .catch(err => {
+                console.log('err:', err)
+                navigate('/')
             })
     }
 
 
-    function signup(credentials) {
-        authService.signup(credentials)
-            .then(user => {
-                setLoggedinUser(user)
-                showSuccessMsg('Signed in successfully')
-                navigate('/bug')
-            })
-            .catch(err => { 
-                console.log(err)
-                showErrorMsg(`Couldn't signup...`) 
-            })
+    function onBack() {
+        navigate('/')
     }
 
+
+    if (!user) return <div>Loading...</div>
 
     return (
-        <div className="login-page">
-            <form className="login-form" onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    name="username"
-                    value={credentials.username}
-                    placeholder="Username"
-                    onChange={handleChange}
-                    required
-                />
-                <input
-                    type="password"
-                    name="password"
-                    value={credentials.password}
-                    placeholder="Password"
-                    onChange={handleChange}
-                    required
-                />
-                {isSignup && <input
-                    type="text"
-                    name="fullname"
-                    value={credentials.fullname}
-                    placeholder="Full name"
-                    onChange={handleChange}
-                    required
-                />}
-                <button>{isSignup ? 'Signup' : 'Login'}</button>
-            </form>
-
-
-            <div className="btns">
-                <a href="#" onClick={() => setIsSignUp(!isSignup)}>
-                    {isSignup ?
-                        'Already a member? Login' :
-                        'New user? Signup here'
-                    }
-                </a >
-            </div>
-        </div >
+        <section className="user-details">
+            <h1>User {user.fullname}</h1>
+            <pre>
+                {JSON.stringify(user, null, 2)}
+            </pre>
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim rem accusantium, itaque ut voluptates quo? Vitae animi maiores nisi, assumenda molestias odit provident quaerat accusamus, reprehenderit impedit, possimus est ad?</p>
+            <button onClick={onBack} >Back</button>
+        </section>
     )
 }

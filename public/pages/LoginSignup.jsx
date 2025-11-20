@@ -1,10 +1,10 @@
 const { useState } = React
 const { useNavigate } = ReactRouter
 
-
 import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 import { userService } from '../services/user.service.js'
 import { authService } from '../services/auth.service.js'
+
 
 export function LoginSignup({ setLoggedinUser }) {
 
@@ -13,18 +13,15 @@ export function LoginSignup({ setLoggedinUser }) {
     
     const navigate = useNavigate()
 
-
     function handleChange({ target }) {
         const { name: field, value } = target
         setCredentials(prevCreds => ({ ...prevCreds, [field]: value }))
     }
 
-
     function handleSubmit(ev) {
         ev.preventDefault()
         isSignup ? signup(credentials) : login(credentials)
     }
-
 
     function login(credentials) {
         authService.login(credentials)
@@ -39,7 +36,6 @@ export function LoginSignup({ setLoggedinUser }) {
             })
     }
 
-
     function signup(credentials) {
         authService.signup(credentials)
             .then(user => {
@@ -53,6 +49,10 @@ export function LoginSignup({ setLoggedinUser }) {
             })
     }
 
+    function onLoginSignupToggle(ev){
+        ev.preventDefault()
+        setIsSignUp(prev => !prev)
+    }
 
     return (
         <div className="login-page">
@@ -84,9 +84,8 @@ export function LoginSignup({ setLoggedinUser }) {
                 <button>{isSignup ? 'Signup' : 'Login'}</button>
             </form>
 
-
             <div className="btns">
-                <a href="#" onClick={() => setIsSignUp(!isSignup)}>
+                <a href="#" onClick={(ev) => onLoginSignupToggle(ev)}>
                     {isSignup ?
                         'Already a member? Login' :
                         'New user? Signup here'

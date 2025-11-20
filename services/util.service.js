@@ -1,18 +1,13 @@
 import fs from 'fs'
 import fr from 'follow-redirects'
 
-
 const { http, https } = fr
-
-
-
 
 export function readJsonFile(path) {
     const str = fs.readFileSync(path, 'utf8')
     const json = JSON.parse(str)
     return json
 }
-
 
 export function writeJsonFile(path, data) {
     return new Promise((resolve, reject) => {
@@ -77,3 +72,11 @@ export function makeId(length = 5) {
     }
     return text
 }
+
+
+
+
+
+
+
+

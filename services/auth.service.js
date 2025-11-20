@@ -1,38 +1,42 @@
-const STORAGE_KEY_LOGGEDIN_USER = 'loggedInUser'
-const BASE_URL = '/api/auth/'
+import Cryptr from 'cryptr'
+import { userService } from './user.service.js'
+const cryptr = new Cryptr(process.env.SECRET1 || 'secret-puk-1234')
+
 
 export const authService = {
-    login,
-    signup,
-    logout,
-    getLoggedinUser
+    checkLogin,
+    getLoginToken,
+    validateToken,
 }
 
-function login({ username, password }) {
-    return axios.post(BASE_URL + 'login', { username, password })
-        .then(res => res.data)
-        .then(_setLoggedinUser)
+
+function checkLogin({ username, password }) {
+   
+    return userService.getByUsername(username)
+        .then(user => {
+            if (user && user.password === password) {
+                user = { ...user }
+                delete user.password
+                return Promise.resolve(user)
+            }
+            return Promise.reject()
+        })
 }
 
-function signup({ username, password, fullname }) {
-    return axios.post(BASE_URL + 'signup', { username, password, fullname })
-        .then(res => res.data)
-        .then(_setLoggedinUser)
+
+function getLoginToken(user) {
+    const userInfo = { _id: user._id, fullname: user.fullname, isAdmin: user.isAdmin }
+    const str = JSON.stringify(userInfo)
+    const encryptedStr = cryptr.encrypt(str)
+    return encryptedStr
 }
 
-function logout() {
-    return axios.post(BASE_URL + 'logout')
-        .then(() => sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER))
-}
 
-function getLoggedinUser() {
-    return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
-}
+function validateToken(token) {
+    if (!token) return null
 
-function _setLoggedinUser(user) {
-    const { _id, fullname, isAdmin } = user
-    const userToSave = { _id, fullname, isAdmin }
-    
-    sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(userToSave))
-    return userToSave
+
+    const str = cryptr.decrypt(token)
+    const user = JSON.parse(str)
+    return user
 }
